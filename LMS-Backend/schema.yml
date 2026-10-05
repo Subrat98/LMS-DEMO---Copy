@@ -1,0 +1,5411 @@
+openapi: 3.0.3
+info:
+  title: PSC College LMS API
+  version: 1.0.0
+  description: Library Management System REST API.
+paths:
+  /api/v1/auth/change-password/:
+    post:
+      operationId: v1_auth_change_password_create
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/login/:
+    post:
+      operationId: v1_auth_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/logout/:
+    post:
+      operationId: v1_auth_logout_create
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/me/:
+    get:
+      operationId: v1_auth_me_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: v1_auth_me_partial_update
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/refresh/:
+    post:
+      operationId: v1_auth_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/v1/book-requests/:
+    get:
+      operationId: v1_book_requests_list
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - Approved
+          - Cancelled
+          - Expired
+          - Issued
+          - Pending
+          - Rejected
+        description: |-
+          * `Pending` - Pending
+          * `Approved` - Approved
+          * `Rejected` - Rejected
+          * `Issued` - Issued
+          * `Cancelled` - Cancelled
+          * `Expired` - Expired
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBookRequestList'
+          description: ''
+  /api/v1/book-requests/{id}/approve/:
+    post:
+      operationId: v1_book_requests_approve_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this book request.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookRequest'
+          description: ''
+  /api/v1/book-requests/{id}/cancel/:
+    post:
+      operationId: v1_book_requests_cancel_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this book request.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookRequest'
+          description: ''
+  /api/v1/book-requests/{id}/reject/:
+    post:
+      operationId: v1_book_requests_reject_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this book request.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookRequest'
+          description: ''
+  /api/v1/booking-audit/:
+    get:
+      operationId: v1_booking_audit_list
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: query
+        name: action
+        schema:
+          type: string
+      - in: query
+        name: booking_no
+        schema:
+          type: string
+      - in: query
+        name: date_after
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: date_before
+        schema:
+          type: string
+          format: date
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: role
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBookingAuditList'
+          description: ''
+  /api/v1/bookings/:
+    get:
+      operationId: v1_bookings_list
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: query
+        name: date_after
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: date_before
+        schema:
+          type: string
+          format: date
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: roll_number
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBookingList'
+          description: ''
+    post:
+      operationId: v1_bookings_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/v1/bookings/{booking_no}/:
+    get:
+      operationId: v1_bookings_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: booking_no
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+    put:
+      operationId: v1_bookings_update
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: booking_no
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+    patch:
+      operationId: v1_bookings_partial_update
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: booking_no
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/v1/bookings/{booking_no}/cancel/:
+    post:
+      operationId: v1_bookings_cancel_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: booking_no
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/v1/bookings/{booking_no}/issue/:
+    post:
+      operationId: v1_bookings_issue_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: booking_no
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/v1/bookings/{booking_no}/verify/:
+    post:
+      operationId: v1_bookings_verify_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: booking_no
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/v1/bookings/lookup/:
+    post:
+      operationId: v1_bookings_lookup_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+          description: ''
+  /api/v1/books/:
+    get:
+      operationId: v1_books_list
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: query
+        name: accession_number
+        schema:
+          type: string
+      - in: query
+        name: available
+        schema:
+          type: boolean
+      - in: query
+        name: category
+        schema:
+          type: string
+      - in: query
+        name: classification
+        schema:
+          type: string
+      - in: query
+        name: library_use_only
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBookList'
+          description: ''
+    post:
+      operationId: v1_books_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookWriteRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookWrite'
+          description: ''
+  /api/v1/books/{id}/:
+    get:
+      operationId: v1_books_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this book.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDetail'
+          description: ''
+    put:
+      operationId: v1_books_update
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this book.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookWriteRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookWrite'
+          description: ''
+    patch:
+      operationId: v1_books_partial_update
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this book.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBookWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBookWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBookWriteRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookWrite'
+          description: ''
+    delete:
+      operationId: v1_books_destroy
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this book.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/books/{id}/copies/:
+    get:
+      operationId: v1_books_copies_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this book.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+    post:
+      operationId: v1_books_copies_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this book.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+  /api/v1/books/{id}/reinstate/:
+    post:
+      operationId: v1_books_reinstate_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this book.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+  /api/v1/books/{id}/retire/:
+    post:
+      operationId: v1_books_retire_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this book.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+  /api/v1/books/bulk-import/:
+    post:
+      operationId: v1_books_bulk_import_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+  /api/v1/books/bulk-import/template/:
+    get:
+      operationId: v1_books_bulk_import_template_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+  /api/v1/copies/{barcode}/:
+    get:
+      operationId: v1_copies_retrieve
+      parameters:
+      - in: path
+        name: barcode
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/copies/{barcode}/status/:
+    patch:
+      operationId: v1_copies_status_partial_update
+      parameters:
+      - in: path
+        name: barcode
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/ebooks/:
+    get:
+      operationId: v1_ebooks_list
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: query
+        name: classification
+        schema:
+          type: string
+          enum:
+          - Course
+          - Current Affairs
+          - Journals
+          - Others
+          - Stream - Arts
+          - Stream - Science
+        description: |-
+          * `Course` - Course
+          * `Stream - Arts` - Stream - Arts
+          * `Stream - Science` - Stream - Science
+          * `Journals` - Journals
+          * `Current Affairs` - Current Affairs
+          * `Others` - Others
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: publish_status
+        schema:
+          type: string
+          enum:
+          - Draft
+          - Published
+        description: |-
+          * `Draft` - Draft
+          * `Published` - Published
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEBookList'
+          description: ''
+    post:
+      operationId: v1_ebooks_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EBookWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EBookWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EBookWriteRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EBookWrite'
+          description: ''
+  /api/v1/ebooks/{id}/:
+    get:
+      operationId: v1_ebooks_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this e book.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EBook'
+          description: ''
+    put:
+      operationId: v1_ebooks_update
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this e book.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EBookWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EBookWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EBookWriteRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EBookWrite'
+          description: ''
+    patch:
+      operationId: v1_ebooks_partial_update
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this e book.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEBookWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEBookWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEBookWriteRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EBookWrite'
+          description: ''
+    delete:
+      operationId: v1_ebooks_destroy
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this e book.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/ebooks/{id}/file/:
+    get:
+      operationId: v1_ebooks_file_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this e book.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EBook'
+          description: ''
+  /api/v1/ebooks/{id}/publish/:
+    post:
+      operationId: v1_ebooks_publish_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this e book.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EBookRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EBookRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EBookRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EBook'
+          description: ''
+  /api/v1/fines/:
+    get:
+      operationId: v1_fines_list
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: query
+        name: date_after
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: date_before
+        schema:
+          type: string
+          format: date
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: roll_number
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFineList'
+          description: ''
+  /api/v1/fines/{id}/:
+    get:
+      operationId: v1_fines_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this fine.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FineDetail'
+          description: ''
+  /api/v1/fines/{id}/collect/:
+    post:
+      operationId: v1_fines_collect_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this fine.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fine'
+          description: ''
+  /api/v1/fines/{id}/waive/:
+    post:
+      operationId: v1_fines_waive_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this fine.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fine'
+          description: ''
+  /api/v1/loans/:
+    get:
+      operationId: v1_loans_list
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: query
+        name: accession_number
+        schema:
+          type: string
+      - in: query
+        name: due_today
+        schema:
+          type: boolean
+      - in: query
+        name: issue_date_after
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: issue_date_before
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: issued_today
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: overdue
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: roll_number
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLoanList'
+          description: ''
+  /api/v1/loans/{id}/:
+    get:
+      operationId: v1_loans_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this loan.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+  /api/v1/loans/{id}/renew/:
+    post:
+      operationId: v1_loans_renew_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this loan.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+  /api/v1/loans/{id}/return/:
+    post:
+      operationId: v1_loans_return_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this loan.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+  /api/v1/loans/{id}/return-preview/:
+    get:
+      operationId: v1_loans_return_preview_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this loan.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+  /api/v1/loans/active/:
+    get:
+      operationId: v1_loans_active_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+  /api/v1/loans/issue/:
+    post:
+      operationId: v1_loans_issue_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+  /api/v1/loans/overdue/:
+    get:
+      operationId: v1_loans_overdue_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+  /api/v1/loans/return-by-barcode/:
+    post:
+      operationId: v1_loans_return_by_barcode_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+  /api/v1/loans/returned/:
+    get:
+      operationId: v1_loans_returned_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+  /api/v1/loans/transactions/:
+    get:
+      operationId: v1_loans_transactions_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+          description: ''
+  /api/v1/members/:
+    get:
+      operationId: v1_members_list
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: query
+        name: academic_year
+        schema:
+          type: string
+      - in: query
+        name: blocked
+        schema:
+          type: boolean
+      - in: query
+        name: department
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMemberList'
+          description: ''
+    post:
+      operationId: v1_members_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MemberWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MemberWriteRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberWrite'
+          description: ''
+  /api/v1/members/{roll_number}/:
+    get:
+      operationId: v1_members_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: roll_number
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: ''
+    put:
+      operationId: v1_members_update
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: roll_number
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MemberWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MemberWriteRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberWrite'
+          description: ''
+    patch:
+      operationId: v1_members_partial_update
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: roll_number
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMemberWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMemberWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMemberWriteRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberWrite'
+          description: ''
+    delete:
+      operationId: v1_members_destroy
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: roll_number
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/members/{roll_number}/block/:
+    post:
+      operationId: v1_members_block_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: roll_number
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MemberRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MemberRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: ''
+  /api/v1/members/{roll_number}/block-override/:
+    post:
+      operationId: v1_members_block_override_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: roll_number
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MemberRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MemberRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: ''
+    delete:
+      operationId: v1_members_block_override_destroy
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: roll_number
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/members/{roll_number}/clearance/:
+    get:
+      operationId: v1_members_clearance_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: roll_number
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: ''
+  /api/v1/members/{roll_number}/fines/:
+    get:
+      operationId: v1_members_fines_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: roll_number
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: ''
+  /api/v1/members/{roll_number}/loans/:
+    get:
+      operationId: v1_members_loans_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: roll_number
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: ''
+  /api/v1/members/{roll_number}/unblock/:
+    post:
+      operationId: v1_members_unblock_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: roll_number
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MemberRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MemberRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: ''
+  /api/v1/notices/:
+    get:
+      operationId: v1_notices_list
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: string
+          enum:
+          - Admissions
+          - Circulars
+          - Events
+          - Examinations
+          - Library Notices
+        description: |-
+          * `Admissions` - Admissions
+          * `Examinations` - Examinations
+          * `Events` - Events
+          * `Circulars` - Circulars
+          * `Library Notices` - Library Notices
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNoticeList'
+          description: ''
+    post:
+      operationId: v1_notices_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoticeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NoticeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NoticeRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notice'
+          description: ''
+  /api/v1/notices/{id}/:
+    get:
+      operationId: v1_notices_retrieve
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notice.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notice'
+          description: ''
+    put:
+      operationId: v1_notices_update
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notice.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoticeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NoticeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NoticeRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notice'
+          description: ''
+    patch:
+      operationId: v1_notices_partial_update
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notice.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNoticeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNoticeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNoticeRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notice'
+          description: ''
+    delete:
+      operationId: v1_notices_destroy
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notice.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/reports/category-distribution/:
+    get:
+      operationId: v1_reports_category_distribution_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/clearance/:
+    get:
+      operationId: v1_reports_clearance_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/dashboard-summary/:
+    get:
+      operationId: v1_reports_dashboard_summary_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/department-usage/:
+    get:
+      operationId: v1_reports_department_usage_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/fine-collection/:
+    get:
+      operationId: v1_reports_fine_collection_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/fine-register/:
+    get:
+      operationId: v1_reports_fine_register_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/fines-breakdown/:
+    get:
+      operationId: v1_reports_fines_breakdown_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/holdings/:
+    get:
+      operationId: v1_reports_holdings_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/issue-return-summary/:
+    get:
+      operationId: v1_reports_issue_return_summary_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/monthly-circulation/:
+    get:
+      operationId: v1_reports_monthly_circulation_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/overdue/:
+    get:
+      operationId: v1_reports_overdue_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/reservations-by-status/:
+    get:
+      operationId: v1_reports_reservations_by_status_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/top-borrowed/:
+    get:
+      operationId: v1_reports_top_borrowed_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reservations/:
+    get:
+      operationId: v1_reservations_list
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: query
+        name: accession_number
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - Cancelled
+          - Expired
+          - Fulfilled
+          - Ready
+          - Waiting
+        description: |-
+          * `Waiting` - Waiting
+          * `Ready` - Ready
+          * `Fulfilled` - Fulfilled
+          * `Expired` - Expired
+          * `Cancelled` - Cancelled
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedReservationList'
+          description: ''
+    post:
+      operationId: v1_reservations_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+          description: ''
+  /api/v1/reservations/{id}/cancel/:
+    post:
+      operationId: v1_reservations_cancel_create
+      description: |-
+        Mixin (combine with a DRF viewset): sets `module_permissions = {action_or_method: (module, action)}`.
+
+        Plain mixin rather than a GenericViewSet subclass, so it composes cleanly with
+        `viewsets.ModelViewSet`/`ReadOnlyModelViewSet` without an MRO clash.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this reservation.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+          description: ''
+  /api/v1/settings/:
+    get:
+      operationId: v1_settings_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: v1_settings_update
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: v1_settings_partial_update
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/settings/public/:
+    get:
+      operationId: v1_settings_public_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/book-requests/:
+    get:
+      operationId: v1_student_book_requests_retrieve
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_student_book_requests_create
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/book-requests/{id}/cancel/:
+    post:
+      operationId: v1_student_book_requests_cancel_create
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/bookings/:
+    get:
+      operationId: v1_student_bookings_retrieve
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_student_bookings_create
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/bookings/{booking_no}/:
+    patch:
+      operationId: v1_student_bookings_partial_update
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      parameters:
+      - in: path
+        name: booking_no
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/bookings/{booking_no}/cancel/:
+    post:
+      operationId: v1_student_bookings_cancel_create
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      parameters:
+      - in: path
+        name: booking_no
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/catalogue/:
+    get:
+      operationId: v1_student_catalogue_retrieve
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/catalogue/{id}/:
+    get:
+      operationId: v1_student_catalogue_retrieve_2
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/clearance/:
+    get:
+      operationId: v1_student_clearance_retrieve
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/dashboard/:
+    get:
+      operationId: v1_student_dashboard_retrieve
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/ebooks/:
+    get:
+      operationId: v1_student_ebooks_retrieve
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/ebooks/{id}/file/:
+    get:
+      operationId: v1_student_ebooks_file_retrieve
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/ebooks/{id}/open/:
+    post:
+      operationId: v1_student_ebooks_open_create
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/fines/:
+    get:
+      operationId: v1_student_fines_retrieve
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/loans/:
+    get:
+      operationId: v1_student_loans_retrieve
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/loans/{id}/renew/:
+    post:
+      operationId: v1_student_loans_renew_create
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/me/:
+    get:
+      operationId: v1_student_me_retrieve
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/notices/:
+    get:
+      operationId: v1_student_notices_retrieve
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/reservations/:
+    get:
+      operationId: v1_student_reservations_retrieve
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: v1_student_reservations_create
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/student/reservations/{id}/cancel/:
+    post:
+      operationId: v1_student_reservations_cancel_create
+      description: Every student self-service view is scoped to `self.member` (never
+        another student's data).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/users/:
+    get:
+      operationId: v1_users_list
+      description: |-
+        Admin-only account management (not in the frontend's permission matrix, but needed
+        since there's no other way to manage logins without the Django admin).
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: pageSize
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserList'
+          description: ''
+    post:
+      operationId: v1_users_create
+      description: |-
+        Admin-only account management (not in the frontend's permission matrix, but needed
+        since there's no other way to manage logins without the Django admin).
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUserWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminUserWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminUserWriteRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUserWrite'
+          description: ''
+  /api/v1/users/{id}/:
+    get:
+      operationId: v1_users_retrieve
+      description: |-
+        Admin-only account management (not in the frontend's permission matrix, but needed
+        since there's no other way to manage logins without the Django admin).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: v1_users_update
+      description: |-
+        Admin-only account management (not in the frontend's permission matrix, but needed
+        since there's no other way to manage logins without the Django admin).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUserWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminUserWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminUserWriteRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUserWrite'
+          description: ''
+    patch:
+      operationId: v1_users_partial_update
+      description: |-
+        Admin-only account management (not in the frontend's permission matrix, but needed
+        since there's no other way to manage logins without the Django admin).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminUserWriteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminUserWriteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminUserWriteRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUserWrite'
+          description: ''
+    delete:
+      operationId: v1_users_destroy
+      description: |-
+        Admin-only account management (not in the frontend's permission matrix, but needed
+        since there's no other way to manage logins without the Django admin).
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AcademicYearEnum:
+      enum:
+      - 1st Year
+      - 2nd Year
+      - 3rd Year
+      type: string
+      description: |-
+        * `1st Year` - 1st Year
+        * `2nd Year` - 2nd Year
+        * `3rd Year` - 3rd Year
+    ActionEnum:
+      enum:
+      - Create
+      - Update
+      - Cancel
+      - Verify
+      - Issue
+      - Return
+      type: string
+      description: |-
+        * `Create` - Create
+        * `Update` - Update
+        * `Cancel` - Cancel
+        * `Verify` - Verify
+        * `Issue` - Issue
+        * `Return` - Return
+    AdminUserWrite:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        name:
+          type: string
+          maxLength: 150
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        status:
+          $ref: '#/components/schemas/StatusE75Enum'
+        email:
+          title: Email address
+          oneOf:
+          - type: string
+            format: email
+            maxLength: 254
+          - type: string
+            maxLength: 0
+        phone:
+          type: string
+          maxLength: 15
+      required:
+      - id
+      - name
+      - username
+    AdminUserWriteRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        status:
+          $ref: '#/components/schemas/StatusE75Enum'
+        email:
+          title: Email address
+          oneOf:
+          - type: string
+            format: email
+            maxLength: 254
+          - type: string
+            maxLength: 0
+        phone:
+          type: string
+          maxLength: 15
+        roll_number:
+          type: string
+          writeOnly: true
+      required:
+      - name
+      - username
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        accession_number:
+          type: string
+          maxLength: 30
+        title:
+          type: string
+          maxLength: 300
+        author:
+          type: string
+          maxLength: 200
+        category:
+          $ref: '#/components/schemas/Category71bEnum'
+        classification:
+          $ref: '#/components/schemas/ClassificationEnum'
+        subject:
+          type: string
+          maxLength: 150
+        price:
+          type: number
+          format: double
+          maximum: 100000000
+          minimum: -100000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        isbn:
+          type: string
+          maxLength: 20
+        publisher:
+          type: string
+          maxLength: 150
+        edition:
+          type: string
+          maxLength: 50
+        total_copies:
+          type: integer
+          readOnly: true
+        available_copies:
+          type: integer
+          readOnly: true
+        shelf_location:
+          type: string
+          maxLength: 50
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status1ddEnum'
+          readOnly: true
+        library_use_only:
+          type: boolean
+        cover_image:
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+        acquisition_date:
+          type: string
+          format: date
+          nullable: true
+        acquisition_source:
+          type: string
+          maxLength: 150
+        added_date:
+          type: string
+          format: date
+          readOnly: true
+        syllabus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyllabusTag'
+          nullable: true
+      required:
+      - accession_number
+      - added_date
+      - author
+      - available_copies
+      - category
+      - classification
+      - id
+      - shelf_location
+      - status
+      - title
+      - total_copies
+    BookDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        accession_number:
+          type: string
+          maxLength: 30
+        title:
+          type: string
+          maxLength: 300
+        author:
+          type: string
+          maxLength: 200
+        category:
+          $ref: '#/components/schemas/Category71bEnum'
+        classification:
+          $ref: '#/components/schemas/ClassificationEnum'
+        subject:
+          type: string
+          maxLength: 150
+        price:
+          type: number
+          format: double
+          maximum: 100000000
+          minimum: -100000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        isbn:
+          type: string
+          maxLength: 20
+        publisher:
+          type: string
+          maxLength: 150
+        edition:
+          type: string
+          maxLength: 50
+        total_copies:
+          type: integer
+          readOnly: true
+        available_copies:
+          type: integer
+          readOnly: true
+        shelf_location:
+          type: string
+          maxLength: 50
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status1ddEnum'
+          readOnly: true
+        library_use_only:
+          type: boolean
+        cover_image:
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+        acquisition_date:
+          type: string
+          format: date
+          nullable: true
+        acquisition_source:
+          type: string
+          maxLength: 150
+        added_date:
+          type: string
+          format: date
+          readOnly: true
+        syllabus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyllabusTag'
+          nullable: true
+        copies:
+          type: string
+          readOnly: true
+      required:
+      - accession_number
+      - added_date
+      - author
+      - available_copies
+      - category
+      - classification
+      - copies
+      - id
+      - shelf_location
+      - status
+      - title
+      - total_copies
+    BookRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        roll_number:
+          type: string
+          readOnly: true
+        member_name:
+          type: string
+          readOnly: true
+        accession_number:
+          type: string
+          readOnly: true
+        book:
+          type: integer
+          readOnly: true
+        book_title:
+          type: string
+          readOnly: true
+        requested_date:
+          type: string
+          format: date
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/BookStatusEnum'
+          readOnly: true
+        held_copy_barcode:
+          type: string
+          readOnly: true
+          nullable: true
+        ready_date:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        expiry_date:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        reject_reason:
+          type: string
+          readOnly: true
+        loan_id:
+          type: integer
+          readOnly: true
+      required:
+      - accession_number
+      - book
+      - book_title
+      - expiry_date
+      - held_copy_barcode
+      - id
+      - loan_id
+      - member_name
+      - ready_date
+      - reject_reason
+      - requested_date
+      - roll_number
+      - status
+    BookStatusEnum:
+      enum:
+      - Pending
+      - Approved
+      - Rejected
+      - Issued
+      - Cancelled
+      - Expired
+      type: string
+      description: |-
+        * `Pending` - Pending
+        * `Approved` - Approved
+        * `Rejected` - Rejected
+        * `Issued` - Issued
+        * `Cancelled` - Cancelled
+        * `Expired` - Expired
+    BookWrite:
+      type: object
+      properties:
+        accession_number:
+          type: string
+          maxLength: 30
+        title:
+          type: string
+          maxLength: 300
+        author:
+          type: string
+          maxLength: 200
+        category:
+          $ref: '#/components/schemas/Category71bEnum'
+        classification:
+          $ref: '#/components/schemas/ClassificationEnum'
+        subject:
+          type: string
+        price:
+          type: number
+          format: double
+          maximum: 100000000
+          minimum: -100000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          default: 0.00
+        isbn:
+          type: string
+        publisher:
+          type: string
+        edition:
+          type: string
+        total_copies:
+          type: integer
+          minimum: 1
+        shelf_location:
+          type: string
+          maxLength: 50
+        library_use_only:
+          type: boolean
+          default: false
+        cover_image:
+          oneOf:
+          - type: string
+            format: uri
+          - type: string
+            maxLength: 0
+        acquisition_date:
+          type: string
+          format: date
+          nullable: true
+        acquisition_source:
+          type: string
+        syllabus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyllabusTag'
+          nullable: true
+      required:
+      - accession_number
+      - author
+      - category
+      - classification
+      - shelf_location
+      - title
+      - total_copies
+    BookWriteRequest:
+      type: object
+      properties:
+        accession_number:
+          type: string
+          minLength: 1
+          maxLength: 30
+        title:
+          type: string
+          minLength: 1
+          maxLength: 300
+        author:
+          type: string
+          minLength: 1
+          maxLength: 200
+        category:
+          $ref: '#/components/schemas/Category71bEnum'
+        classification:
+          $ref: '#/components/schemas/ClassificationEnum'
+        subject:
+          type: string
+        price:
+          type: number
+          format: double
+          maximum: 100000000
+          minimum: -100000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          default: 0.00
+        isbn:
+          type: string
+        publisher:
+          type: string
+        edition:
+          type: string
+        total_copies:
+          type: integer
+          minimum: 1
+        shelf_location:
+          type: string
+          minLength: 1
+          maxLength: 50
+        library_use_only:
+          type: boolean
+          default: false
+        cover_image:
+          oneOf:
+          - type: string
+            format: uri
+          - type: string
+            maxLength: 0
+        acquisition_date:
+          type: string
+          format: date
+          nullable: true
+        acquisition_source:
+          type: string
+        syllabus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyllabusTagRequest'
+          nullable: true
+      required:
+      - accession_number
+      - author
+      - category
+      - classification
+      - shelf_location
+      - title
+      - total_copies
+    Booking:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        booking_no:
+          type: string
+          readOnly: true
+        roll_number:
+          type: string
+          readOnly: true
+        student_name:
+          type: string
+          readOnly: true
+        accession_number:
+          type: string
+          readOnly: true
+        book:
+          type: integer
+          readOnly: true
+        book_title:
+          type: string
+          readOnly: true
+        booking_date:
+          type: string
+          format: date
+          readOnly: true
+        expiry_date:
+          type: string
+          format: date
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/BookingStatusEnum'
+          readOnly: true
+        held_copy_barcode:
+          type: string
+          readOnly: true
+          nullable: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        verified_by_name:
+          type: string
+          readOnly: true
+        verified_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        issued_by_name:
+          type: string
+          readOnly: true
+        issued_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        loan_id:
+          type: integer
+          readOnly: true
+        returned_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        cancelled_by_name:
+          type: string
+          readOnly: true
+        cancelled_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        cancellation_reason:
+          type: string
+          readOnly: true
+        is_expired:
+          type: string
+          readOnly: true
+      required:
+      - accession_number
+      - book
+      - book_title
+      - booking_date
+      - booking_no
+      - cancellation_reason
+      - cancelled_at
+      - cancelled_by_name
+      - expiry_date
+      - held_copy_barcode
+      - id
+      - is_expired
+      - issued_at
+      - issued_by_name
+      - loan_id
+      - returned_at
+      - roll_number
+      - status
+      - student_name
+      - updated_at
+      - verified_at
+      - verified_by_name
+    BookingAudit:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_id:
+          type: integer
+          readOnly: true
+        user_name:
+          type: string
+          readOnly: true
+        role:
+          type: string
+          readOnly: true
+        action_time:
+          type: string
+          format: date-time
+          readOnly: true
+        action:
+          allOf:
+          - $ref: '#/components/schemas/ActionEnum'
+          readOnly: true
+        booking_no:
+          type: string
+          readOnly: true
+        cancellation_reason:
+          type: string
+          readOnly: true
+        details:
+          type: string
+          readOnly: true
+      required:
+      - action
+      - action_time
+      - booking_no
+      - cancellation_reason
+      - details
+      - id
+      - role
+      - user_id
+      - user_name
+    BookingStatusEnum:
+      enum:
+      - Booked
+      - Verified
+      - Issued
+      - Returned
+      - Cancelled
+      type: string
+      description: |-
+        * `Booked` - Booked
+        * `Verified` - Verified
+        * `Issued` - Issued
+        * `Returned` - Returned
+        * `Cancelled` - Cancelled
+    Category71bEnum:
+      enum:
+      - Arts
+      - Science
+      - Commerce
+      - Literature
+      - Reference
+      type: string
+      description: |-
+        * `Arts` - Arts
+        * `Science` - Science
+        * `Commerce` - Commerce
+        * `Literature` - Literature
+        * `Reference` - Reference
+    ClassificationEnum:
+      enum:
+      - Course
+      - Stream - Arts
+      - Stream - Science
+      - Journals
+      - Current Affairs
+      - Others
+      type: string
+      description: |-
+        * `Course` - Course
+        * `Stream - Arts` - Stream - Arts
+        * `Stream - Science` - Stream - Science
+        * `Journals` - Journals
+        * `Current Affairs` - Current Affairs
+        * `Others` - Others
+    DepartmentEnum:
+      enum:
+      - B.A. Odia
+      - B.A. English
+      - B.A. History
+      - B.A. Political Science
+      - B.Sc. Physics
+      - B.Sc. Chemistry
+      - B.Sc. Mathematics
+      - B.Sc. Botany
+      - B.Sc. Zoology
+      - B.Com
+      type: string
+      description: |-
+        * `B.A. Odia` - B.A. Odia
+        * `B.A. English` - B.A. English
+        * `B.A. History` - B.A. History
+        * `B.A. Political Science` - B.A. Political Science
+        * `B.Sc. Physics` - B.Sc. Physics
+        * `B.Sc. Chemistry` - B.Sc. Chemistry
+        * `B.Sc. Mathematics` - B.Sc. Mathematics
+        * `B.Sc. Botany` - B.Sc. Botany
+        * `B.Sc. Zoology` - B.Sc. Zoology
+        * `B.Com` - B.Com
+    EBook:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 300
+        author:
+          type: string
+          maxLength: 200
+        classification:
+          $ref: '#/components/schemas/ClassificationEnum'
+        file_url:
+          type: string
+          readOnly: true
+        file_size:
+          type: string
+          readOnly: true
+        file_size_bytes:
+          type: integer
+          readOnly: true
+        publish_status:
+          allOf:
+          - $ref: '#/components/schemas/PublishStatusEnum'
+          readOnly: true
+        description:
+          type: string
+        uploaded_by:
+          type: string
+          readOnly: true
+        uploaded_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        download_count:
+          type: integer
+          readOnly: true
+        syllabus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyllabusTag'
+          nullable: true
+      required:
+      - author
+      - classification
+      - download_count
+      - file_size
+      - file_size_bytes
+      - file_url
+      - id
+      - publish_status
+      - published_at
+      - title
+      - uploaded_at
+      - uploaded_by
+    EBookRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 300
+        author:
+          type: string
+          minLength: 1
+          maxLength: 200
+        classification:
+          $ref: '#/components/schemas/ClassificationEnum'
+        description:
+          type: string
+        syllabus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyllabusTagRequest'
+          nullable: true
+      required:
+      - author
+      - classification
+      - title
+    EBookWrite:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 300
+        author:
+          type: string
+          maxLength: 200
+        classification:
+          $ref: '#/components/schemas/ClassificationEnum'
+        file:
+          type: string
+          format: uri
+          nullable: true
+        description:
+          type: string
+        is_published:
+          type: boolean
+          default: false
+        syllabus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyllabusTag'
+          nullable: true
+      required:
+      - author
+      - classification
+      - title
+    EBookWriteRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 300
+        author:
+          type: string
+          minLength: 1
+          maxLength: 200
+        classification:
+          $ref: '#/components/schemas/ClassificationEnum'
+        file:
+          type: string
+          format: binary
+        description:
+          type: string
+        is_published:
+          type: boolean
+          default: false
+        syllabus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyllabusTagRequest'
+          nullable: true
+      required:
+      - author
+      - classification
+      - title
+    Fine:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        loan_id:
+          type: integer
+          readOnly: true
+        roll_number:
+          type: string
+          readOnly: true
+        member_name:
+          type: string
+          readOnly: true
+        book_title:
+          type: string
+          readOnly: true
+        overdue_days:
+          type: integer
+          readOnly: true
+        amount:
+          type: number
+          format: double
+          maximum: 100000000
+          minimum: -100000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          readOnly: true
+        reason:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusF21Enum'
+          readOnly: true
+        created_date:
+          type: string
+          format: date
+          readOnly: true
+        collected_date:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        actioned_by_name:
+          type: string
+          readOnly: true
+          nullable: true
+      required:
+      - actioned_by_name
+      - amount
+      - book_title
+      - collected_date
+      - created_date
+      - id
+      - loan_id
+      - member_name
+      - overdue_days
+      - reason
+      - roll_number
+      - status
+    FineDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        loan_id:
+          type: integer
+          readOnly: true
+        roll_number:
+          type: string
+          readOnly: true
+        member_name:
+          type: string
+          readOnly: true
+        book_title:
+          type: string
+          readOnly: true
+        overdue_days:
+          type: integer
+          readOnly: true
+        amount:
+          type: number
+          format: double
+          maximum: 100000000
+          minimum: -100000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          readOnly: true
+        reason:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusF21Enum'
+          readOnly: true
+        created_date:
+          type: string
+          format: date
+          readOnly: true
+        collected_date:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        actioned_by_name:
+          type: string
+          readOnly: true
+          nullable: true
+        loan:
+          allOf:
+          - $ref: '#/components/schemas/Loan'
+          readOnly: true
+      required:
+      - actioned_by_name
+      - amount
+      - book_title
+      - collected_date
+      - created_date
+      - id
+      - loan
+      - loan_id
+      - member_name
+      - overdue_days
+      - reason
+      - roll_number
+      - status
+    Loan:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        roll_number:
+          type: string
+          readOnly: true
+        member_name:
+          type: string
+          readOnly: true
+        department:
+          type: string
+          readOnly: true
+        accession_number:
+          type: string
+          readOnly: true
+        book_id:
+          type: integer
+          readOnly: true
+        book_title:
+          type: string
+          readOnly: true
+        copy_barcode:
+          type: string
+          readOnly: true
+        issue_date:
+          type: string
+          format: date
+          readOnly: true
+        due_date:
+          type: string
+          format: date
+          readOnly: true
+        return_date:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/LoanStatusEnum'
+          readOnly: true
+        renewal_count:
+          type: integer
+          readOnly: true
+        fine_id:
+          type: string
+          readOnly: true
+        booking_id:
+          type: string
+          readOnly: true
+        overdue_days:
+          type: string
+          readOnly: true
+        accrued_fine:
+          type: string
+          readOnly: true
+        can_renew:
+          type: string
+          readOnly: true
+      required:
+      - accession_number
+      - accrued_fine
+      - book_id
+      - book_title
+      - booking_id
+      - can_renew
+      - copy_barcode
+      - department
+      - due_date
+      - fine_id
+      - id
+      - issue_date
+      - member_name
+      - overdue_days
+      - renewal_count
+      - return_date
+      - roll_number
+      - status
+    LoanStatusEnum:
+      enum:
+      - Active
+      - Returned
+      type: string
+      description: |-
+        * `Active` - Active
+        * `Returned` - Returned
+    LoginRequest:
+      type: object
+      description: |-
+        Extends simplejwt's obtain-pair serializer with a custom-claim token and a
+        pre-check for suspended accounts (so the error message matches the frontend's
+        "This account is suspended" rather than a generic auth failure).
+      properties:
+        username:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    Member:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        roll_number:
+          type: string
+          maxLength: 20
+        name:
+          type: string
+          maxLength: 150
+        department:
+          $ref: '#/components/schemas/DepartmentEnum'
+        academic_year:
+          $ref: '#/components/schemas/AcademicYearEnum'
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phone:
+          type: string
+          maxLength: 10
+        status:
+          $ref: '#/components/schemas/Status5cfEnum'
+        is_blocked:
+          type: boolean
+        block_reason:
+          type: string
+        block_override:
+          type: string
+          readOnly: true
+        block_status:
+          type: string
+          readOnly: true
+        active_loan_count:
+          type: string
+          readOnly: true
+        has_login:
+          type: string
+          readOnly: true
+        join_date:
+          type: string
+          format: date
+        avatar_url:
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+      required:
+      - academic_year
+      - active_loan_count
+      - block_override
+      - block_status
+      - department
+      - email
+      - has_login
+      - id
+      - join_date
+      - name
+      - phone
+      - roll_number
+    MemberRequest:
+      type: object
+      properties:
+        roll_number:
+          type: string
+          minLength: 1
+          maxLength: 20
+        name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        department:
+          $ref: '#/components/schemas/DepartmentEnum'
+        academic_year:
+          $ref: '#/components/schemas/AcademicYearEnum'
+        email:
+          type: string
+          format: email
+          minLength: 1
+          maxLength: 254
+        phone:
+          type: string
+          minLength: 1
+          maxLength: 10
+        status:
+          $ref: '#/components/schemas/Status5cfEnum'
+        is_blocked:
+          type: boolean
+        block_reason:
+          type: string
+        join_date:
+          type: string
+          format: date
+        avatar_url:
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+      required:
+      - academic_year
+      - department
+      - email
+      - join_date
+      - name
+      - phone
+      - roll_number
+    MemberWrite:
+      type: object
+      description: |-
+        Create/update. `rollNumber` required and unique (case-insensitive); immutable once issued
+        is NOT enforced here (the frontend disabled the input, but renaming is a valid admin action —
+        `members.services.update_member` keeps the linked login's username in sync).
+      properties:
+        roll_number:
+          type: string
+          maxLength: 20
+        name:
+          type: string
+          maxLength: 150
+        department:
+          $ref: '#/components/schemas/DepartmentEnum'
+        academic_year:
+          $ref: '#/components/schemas/AcademicYearEnum'
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          pattern: ^\d{10}$
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status5cfEnum'
+          default: Active
+      required:
+      - academic_year
+      - department
+      - email
+      - name
+      - phone
+      - roll_number
+    MemberWriteRequest:
+      type: object
+      description: |-
+        Create/update. `rollNumber` required and unique (case-insensitive); immutable once issued
+        is NOT enforced here (the frontend disabled the input, but renaming is a valid admin action —
+        `members.services.update_member` keeps the linked login's username in sync).
+      properties:
+        roll_number:
+          type: string
+          minLength: 1
+          maxLength: 20
+        name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        department:
+          $ref: '#/components/schemas/DepartmentEnum'
+        academic_year:
+          $ref: '#/components/schemas/AcademicYearEnum'
+        email:
+          type: string
+          format: email
+          minLength: 1
+        phone:
+          type: string
+          minLength: 1
+          pattern: ^\d{10}$
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status5cfEnum'
+          default: Active
+        create_login:
+          type: boolean
+          writeOnly: true
+          default: false
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - academic_year
+      - department
+      - email
+      - name
+      - phone
+      - roll_number
+    Notice:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        content:
+          type: string
+        category:
+          $ref: '#/components/schemas/NoticeCategoryEnum'
+        publish_date:
+          type: string
+          format: date
+        expiry_date:
+          type: string
+          format: date
+          nullable: true
+        created_by_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        is_active:
+          type: string
+          readOnly: true
+      required:
+      - category
+      - content
+      - created_at
+      - created_by_name
+      - id
+      - is_active
+      - publish_date
+      - title
+      - updated_at
+    NoticeCategoryEnum:
+      enum:
+      - Admissions
+      - Examinations
+      - Events
+      - Circulars
+      - Library Notices
+      type: string
+      description: |-
+        * `Admissions` - Admissions
+        * `Examinations` - Examinations
+        * `Events` - Events
+        * `Circulars` - Circulars
+        * `Library Notices` - Library Notices
+    NoticeRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        content:
+          type: string
+          minLength: 1
+        category:
+          $ref: '#/components/schemas/NoticeCategoryEnum'
+        publish_date:
+          type: string
+          format: date
+        expiry_date:
+          type: string
+          format: date
+          nullable: true
+      required:
+      - category
+      - content
+      - publish_date
+      - title
+    PaginatedBookList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+    PaginatedBookRequestList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookRequest'
+    PaginatedBookingAuditList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingAudit'
+    PaginatedBookingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Booking'
+    PaginatedEBookList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EBook'
+    PaginatedFineList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fine'
+    PaginatedLoanList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Loan'
+    PaginatedMemberList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Member'
+    PaginatedNoticeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notice'
+    PaginatedReservationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reservation'
+    PaginatedUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    PatchedAdminUserWriteRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        status:
+          $ref: '#/components/schemas/StatusE75Enum'
+        email:
+          title: Email address
+          oneOf:
+          - type: string
+            format: email
+            maxLength: 254
+          - type: string
+            maxLength: 0
+        phone:
+          type: string
+          maxLength: 15
+        roll_number:
+          type: string
+          writeOnly: true
+    PatchedBookWriteRequest:
+      type: object
+      properties:
+        accession_number:
+          type: string
+          minLength: 1
+          maxLength: 30
+        title:
+          type: string
+          minLength: 1
+          maxLength: 300
+        author:
+          type: string
+          minLength: 1
+          maxLength: 200
+        category:
+          $ref: '#/components/schemas/Category71bEnum'
+        classification:
+          $ref: '#/components/schemas/ClassificationEnum'
+        subject:
+          type: string
+        price:
+          type: number
+          format: double
+          maximum: 100000000
+          minimum: -100000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          default: 0.00
+        isbn:
+          type: string
+        publisher:
+          type: string
+        edition:
+          type: string
+        total_copies:
+          type: integer
+          minimum: 1
+        shelf_location:
+          type: string
+          minLength: 1
+          maxLength: 50
+        library_use_only:
+          type: boolean
+          default: false
+        cover_image:
+          oneOf:
+          - type: string
+            format: uri
+          - type: string
+            maxLength: 0
+        acquisition_date:
+          type: string
+          format: date
+          nullable: true
+        acquisition_source:
+          type: string
+        syllabus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyllabusTagRequest'
+          nullable: true
+    PatchedEBookWriteRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 300
+        author:
+          type: string
+          minLength: 1
+          maxLength: 200
+        classification:
+          $ref: '#/components/schemas/ClassificationEnum'
+        file:
+          type: string
+          format: binary
+        description:
+          type: string
+        is_published:
+          type: boolean
+          default: false
+        syllabus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyllabusTagRequest'
+          nullable: true
+    PatchedMemberWriteRequest:
+      type: object
+      description: |-
+        Create/update. `rollNumber` required and unique (case-insensitive); immutable once issued
+        is NOT enforced here (the frontend disabled the input, but renaming is a valid admin action —
+        `members.services.update_member` keeps the linked login's username in sync).
+      properties:
+        roll_number:
+          type: string
+          minLength: 1
+          maxLength: 20
+        name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        department:
+          $ref: '#/components/schemas/DepartmentEnum'
+        academic_year:
+          $ref: '#/components/schemas/AcademicYearEnum'
+        email:
+          type: string
+          format: email
+          minLength: 1
+        phone:
+          type: string
+          minLength: 1
+          pattern: ^\d{10}$
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status5cfEnum'
+          default: Active
+        create_login:
+          type: boolean
+          writeOnly: true
+          default: false
+        password:
+          type: string
+          writeOnly: true
+    PatchedNoticeRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        content:
+          type: string
+          minLength: 1
+        category:
+          $ref: '#/components/schemas/NoticeCategoryEnum'
+        publish_date:
+          type: string
+          format: date
+        expiry_date:
+          type: string
+          format: date
+          nullable: true
+    ProgrammeEnum:
+      enum:
+      - B.A. Odia
+      - B.A. English
+      - B.A. History
+      - B.A. Political Science
+      - B.Sc. Physics
+      - B.Sc. Chemistry
+      - B.Sc. Mathematics
+      - B.Sc. Botany
+      - B.Sc. Zoology
+      - B.Com
+      type: string
+      description: |-
+        * `B.A. Odia` - B.A. Odia
+        * `B.A. English` - B.A. English
+        * `B.A. History` - B.A. History
+        * `B.A. Political Science` - B.A. Political Science
+        * `B.Sc. Physics` - B.Sc. Physics
+        * `B.Sc. Chemistry` - B.Sc. Chemistry
+        * `B.Sc. Mathematics` - B.Sc. Mathematics
+        * `B.Sc. Botany` - B.Sc. Botany
+        * `B.Sc. Zoology` - B.Sc. Zoology
+        * `B.Com` - B.Com
+    PublishStatusEnum:
+      enum:
+      - Draft
+      - Published
+      type: string
+      description: |-
+        * `Draft` - Draft
+        * `Published` - Published
+    Reservation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        roll_number:
+          type: string
+          readOnly: true
+        member_name:
+          type: string
+          readOnly: true
+        accession_number:
+          type: string
+          readOnly: true
+        book:
+          type: integer
+          readOnly: true
+        book_title:
+          type: string
+          readOnly: true
+        queue_position:
+          type: integer
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/ReservationStatusEnum'
+          readOnly: true
+        reserved_date:
+          type: string
+          format: date
+          readOnly: true
+        ready_date:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        expiry_date:
+          type: string
+          format: date
+          readOnly: true
+          nullable: true
+        held_copy_barcode:
+          type: string
+          readOnly: true
+          nullable: true
+      required:
+      - accession_number
+      - book
+      - book_title
+      - expiry_date
+      - held_copy_barcode
+      - id
+      - member_name
+      - queue_position
+      - ready_date
+      - reserved_date
+      - roll_number
+      - status
+    ReservationStatusEnum:
+      enum:
+      - Waiting
+      - Ready
+      - Fulfilled
+      - Expired
+      - Cancelled
+      type: string
+      description: |-
+        * `Waiting` - Waiting
+        * `Ready` - Ready
+        * `Fulfilled` - Fulfilled
+        * `Expired` - Expired
+        * `Cancelled` - Cancelled
+    RoleEnum:
+      enum:
+      - admin
+      - librarian
+      - staff
+      - principal
+      - student
+      type: string
+      description: |-
+        * `admin` - Administrator
+        * `librarian` - Librarian
+        * `staff` - Staff
+        * `principal` - Principal
+        * `student` - Student
+    Status1ddEnum:
+      enum:
+      - Available
+      - Fully Issued
+      - Retired
+      type: string
+      description: |-
+        * `Available` - Available
+        * `Fully Issued` - Fully Issued
+        * `Retired` - Retired
+    Status5cfEnum:
+      enum:
+      - Active
+      - Inactive
+      - Suspended
+      type: string
+      description: |-
+        * `Active` - Active
+        * `Inactive` - Inactive
+        * `Suspended` - Suspended
+    StatusE75Enum:
+      enum:
+      - active
+      - suspended
+      type: string
+      description: |-
+        * `active` - Active
+        * `suspended` - Suspended
+    StatusF21Enum:
+      enum:
+      - Pending
+      - Collected
+      - Waived
+      type: string
+      description: |-
+        * `Pending` - Pending
+        * `Collected` - Collected
+        * `Waived` - Waived
+    SyllabusTag:
+      type: object
+      properties:
+        programme:
+          $ref: '#/components/schemas/ProgrammeEnum'
+        year:
+          $ref: '#/components/schemas/YearEnum'
+      required:
+      - programme
+      - year
+    SyllabusTagRequest:
+      type: object
+      properties:
+        programme:
+          $ref: '#/components/schemas/ProgrammeEnum'
+        year:
+          $ref: '#/components/schemas/YearEnum'
+      required:
+      - programme
+      - year
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+      required:
+      - refresh
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        name:
+          type: string
+          maxLength: 150
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        status:
+          $ref: '#/components/schemas/StatusE75Enum'
+        email:
+          title: Email address
+          oneOf:
+          - type: string
+            format: email
+            maxLength: 254
+          - type: string
+            maxLength: 0
+        phone:
+          type: string
+          maxLength: 15
+        avatar_url:
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+        roll_number:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        last_login_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - last_login_at
+      - name
+      - roll_number
+      - username
+    YearEnum:
+      enum:
+      - 1st Year
+      - 2nd Year
+      - 3rd Year
+      type: string
+      description: |-
+        * `1st Year` - 1st Year
+        * `2nd Year` - 2nd Year
+        * `3rd Year` - 3rd Year
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
